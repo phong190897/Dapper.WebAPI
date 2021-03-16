@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace Dapper.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    //[Authorize]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Produces("application/json")]
     [ApiController]
     public class ProductController : ControllerBase
     {

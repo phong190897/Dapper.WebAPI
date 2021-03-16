@@ -1,17 +1,12 @@
-using Dapper.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Dapper.Infrastructure.Extensions;
+using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Dapper.WebApi
 {
@@ -29,17 +24,15 @@ namespace Dapper.WebApi
         {
             services.AddControllers();
 
-            services.AddInfrastructure();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.IncludeXmlComments(string.Format(@"{0}\Dapper.WebApi.xml", System.AppDomain.CurrentDomain.BaseDirectory));
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Dapper - WebApi",
-                });
+            services.AddApiVersioning(options => {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
             });
+
+            services.AddOptions(Configuration);
+            services.AddInfrastructure();
+            services.AddSwagger($"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+            services.AddJwtAuthentication(Configuration);
 
         }
 
@@ -55,6 +48,7 @@ namespace Dapper.WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -66,6 +60,7 @@ namespace Dapper.WebApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dapper.WebApi");
+                c.DisplayRequestDuration();
             });
         }
     }

@@ -7,5 +7,6 @@ namespace Dapper.Application.IRepositories.IRepositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
+
     }
 }
