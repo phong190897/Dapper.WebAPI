@@ -1,6 +1,7 @@
 ﻿using Dapper.Application.IRepositories;
 using Dapper.Application.IRepositories.IRepositories;
 using Dapper.Core.CustomEntities;
+using Dapper.Core.Enumerations;
 using Dapper.Infrastructure.Filters.Swagger;
 using Dapper.Infrastructure.Options;
 using Dapper.Infrastructure.Repositories;
@@ -80,12 +81,29 @@ namespace Dapper.Infrastructure.Extensions
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IDbConnectionFactory, DapperDbConnectionFactory>();
         }
 
         public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<PaginationOption>(options => configuration.GetSection("Pagination").Bind(options));
             services.Configure<PasswordOption>(options => configuration.GetSection("PasswordOptions").Bind(options));
+
+            return services;
+        }
+
+        public static IServiceCollection AddConnection(this IServiceCollection services, IConfiguration configuration)
+        {
+
+            var connectionDict = new Dictionary<ConnectionType, string>
+            {
+                { ConnectionType.Connection1, configuration.GetConnectionString("DefaultConnection") },
+                { ConnectionType.Connection2, configuration.GetConnectionString("dbConnection2") }
+            };
+
+            // Inject this dict
+            services.AddSingleton<IDictionary<ConnectionType, string>>(connectionDict);
 
             return services;
         }

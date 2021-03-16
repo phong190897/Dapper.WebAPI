@@ -31,6 +31,7 @@ namespace Dapper.WebApi
 
             services.AddOptions(Configuration);
             services.AddInfrastructure();
+            services.AddConnection(Configuration);
             services.AddSwagger($"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
             services.AddJwtAuthentication(Configuration);
 
