@@ -20,7 +20,7 @@ namespace Dapper.Core.CustomEntities
             TotalCount = count;
             PageSize = pageSize;
             CurrentPage = pageNumber;
-            TotalPages = (int)Math.Ceiling(count / (double)pageNumber);
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
 
             AddRange(items);
         }

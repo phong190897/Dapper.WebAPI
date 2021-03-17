@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dapper.Application.IRepositories
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         IProductRepository Products { get; }
     }

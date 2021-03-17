@@ -1,5 +1,6 @@
 ﻿using Dapper.Application.IRepositories;
 using Dapper.Application.IRepositories.IRepositories;
+using System;
 
 namespace Dapper.Infrastructure.Repositories
 {
@@ -11,5 +12,10 @@ namespace Dapper.Infrastructure.Repositories
         }
 
         public IProductRepository Products { get; }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

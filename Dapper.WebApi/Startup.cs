@@ -29,11 +29,17 @@ namespace Dapper.WebApi
                 options.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
+
             services.AddOptions(Configuration);
-            services.AddInfrastructure();
             services.AddConnection(Configuration);
             services.AddSwagger($"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
             services.AddJwtAuthentication(Configuration);
+            services.AddInfrastructure();
 
         }
 
@@ -60,7 +66,8 @@ namespace Dapper.WebApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dapper.WebApi");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dapper.WebApi v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Dapper.WebApi v2");
                 c.DisplayRequestDuration();
             });
         }

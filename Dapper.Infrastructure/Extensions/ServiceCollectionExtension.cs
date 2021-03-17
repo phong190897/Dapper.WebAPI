@@ -1,12 +1,15 @@
 ﻿using Dapper.Application.IRepositories;
 using Dapper.Application.IRepositories.IRepositories;
+using Dapper.Application.IServices;
 using Dapper.Core.CustomEntities;
 using Dapper.Core.Enumerations;
 using Dapper.Infrastructure.Filters.Swagger;
 using Dapper.Infrastructure.Options;
 using Dapper.Infrastructure.Repositories;
 using Dapper.Infrastructure.Repositories.Repositories;
+using Dapper.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -32,13 +35,13 @@ namespace Dapper.Infrastructure.Extensions
                     Description = "API V1 Description"
                 });
 
-                //options.SwaggerDoc("v2", new OpenApiInfo
-                //{
-                //    Title = "StarDesign API v2",
-                //    Version = "v2",
-                //    Description = "API V2 Description"
+                options.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title = "Dapper.WebAPI v2",
+                    Version = "v2",
+                    Description = "API V2 Description"
 
-                //});
+                });
 
                 options.ResolveConflictingActions(c => c.First());
                 options.OperationFilter<RemoveVersionFromParameter>();
@@ -77,12 +80,22 @@ namespace Dapper.Infrastructure.Extensions
             return services;
         }
 
-        public static void AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IDbConnectionFactory, DapperDbConnectionFactory>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddSingleton<IUriService>(provider => {
+                var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var absoluteUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(absoluteUri);
+            });
+
+            return services;
         }
 
         public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
