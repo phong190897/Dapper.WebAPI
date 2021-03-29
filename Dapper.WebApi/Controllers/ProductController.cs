@@ -2,7 +2,7 @@
 using Dapper.Application.IRepositories;
 using Dapper.Application.IServices;
 using Dapper.Core.CustomEntities;
-using Dapper.Core.Entities;
+using Dapper.Core.Entities.DBEntities;
 using Dapper.Core.QueryFilters;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

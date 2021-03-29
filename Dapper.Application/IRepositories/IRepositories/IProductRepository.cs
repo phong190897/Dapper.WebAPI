@@ -1,5 +1,5 @@
 ﻿using Dapper.Core.CustomEntities;
-using Dapper.Core.Entities;
+using Dapper.Core.Entities.DBEntities;
 using Dapper.Core.QueryFilters;
 
 namespace Dapper.Application.IRepositories.IRepositories

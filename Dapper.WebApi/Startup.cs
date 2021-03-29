@@ -54,7 +54,6 @@ namespace Dapper.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 

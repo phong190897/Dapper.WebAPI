@@ -2,9 +2,8 @@
 using Dapper.Application.IRepositories.IRepositories;
 using Dapper.Application.Persistences;
 using Dapper.Core.CustomEntities;
-using Dapper.Core.Entities;
+using Dapper.Core.Entities.DBEntities;
 using Dapper.Core.QueryFilters;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;

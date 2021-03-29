@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dapper.Core.Entities
+namespace Dapper.Core.Entities.DBEntities
 {
     public class Product
     {
